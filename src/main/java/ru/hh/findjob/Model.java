@@ -69,7 +69,7 @@ public class Model extends Task<Void> {
         Date date = new Date(new Date().getTime() - 86400000);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        HttpGet httpGet = new HttpGet(String.format("%svacancies?text=%s&experience=%s&date_from=%s&sper_page=500",
+        HttpGet httpGet = new HttpGet(String.format("%svacancies?text=%s&experience=%s&date_from=%s&per_page=500",
                 baseURI, searchWord, experience, dateFormat.format(date)));
 
         httpGet.addHeader("Authorization", "Bearer " + accessToken);
