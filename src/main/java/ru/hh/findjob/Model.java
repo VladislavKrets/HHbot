@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,18 +66,22 @@ public class Model extends Task<Void> {
                 experience = "moreThan6";
                 break;
         }
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
         Date date = new Date(new Date().getTime() - 86400000);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        HttpGet httpGet = new HttpGet(String.format("%svacancies?text=%s&experience=%s&date_from=%s&per_page=500",
+        System.out.println(String.format("%svacancies?text=%s&experience=%s&date_from=%s&per_page=500",
                 baseURI, searchWord, experience, dateFormat.format(date)));
 
+        HttpGet httpGet = new HttpGet(String.format("%svacancies?text=%s&experience=%s&date_from=%s&per_page=100",
+                baseURI, URLEncoder.encode(searchWord, "UTF-8"), experience, dateFormat.format(date)));
+        System.out.println(httpGet.getURI());
         httpGet.addHeader("Authorization", "Bearer " + accessToken);
 
         CloseableHttpResponse response = httpClient.execute(httpGet);
         BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
         String answer = reader.readLine();
+        System.out.println(answer);
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(List.class, new VacancyConverter());
         Gson gson = builder.create();

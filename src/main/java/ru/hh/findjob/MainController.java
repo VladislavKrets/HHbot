@@ -110,12 +110,16 @@ public class MainController implements Initializable {
         vacancyView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                String url = vacancyView.getSelectionModel().getSelectedItem().split("[\n]")[1].split(" ")[1];
+                try {
+                    String url = vacancyView.getSelectionModel().getSelectedItem().split("[\n]")[1].split(" ")[1];
 
-                mainApp.getHostServices().showDocument(url);
+                    mainApp.getHostServices().showDocument(url);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
-
+        
     }
 }
